@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Mi Lista de Tareas </title>
+    <style>
+        /* --- ESTILOS GENERALES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+        }
+
+        /* --- SECCIÓN DE LA LISTA DE TAREAS --- */
+        .todo-card {
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        h2 {
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-group input:focus {
+            border-color: #3498db;
+        }
+
+        .btn-add {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .btn-add:hover {
+            background-color: #2980b9;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        li {
+            background: #f8fafc;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #3498db;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+
+        .btn-delete:hover {
+            background-color: #c0392b;
+        }
+
+        /* --- SECCIÓN DEL CREADOR --- */
+        .profile-card {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-card h2 {
+            color: #ffffff;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.5rem;
+        }
+
+        .profile-info {
+            margin-top: 1rem;
+        }
+
+        .profile-info p {
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .profile-info strong {
+            color: #3498db;
+        }
+
+        .social-links {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            color: #ffffff;
+            text-decoration: none;
+            background: #34495e;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .social-links a:hover {
+            background: #3498db;
+        }
+
+        /* Animación simple */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CONTENEDOR 1: LISTA DE TAREAS -->
+    <div class="container">
+        <div class="todo-card">
+            <h2>Aplicacion tareas</h2>
+            <div class="input-group">
+                <input type="text" id="taskInput" placeholder="Escribe una nueva tarea..." autocomplete="off">
+                <button class="btn-add" onclick="addTask()">Agregar</button>
+            </div>
+            <ul id="taskList">
+                <!-- Las tareas se generarán aquí con JavaScript -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- CONTENEDOR 2: DATOS DEL CREADOR -->
+    <div class="container">
+        <div class="profile-card">
+            <h2>Sobre el Creador</h2>
+            <div class="profile-info">
+                <p><strong>Nombre:</strong> Cristian</p>
+                <p><strong>Rol:</strong> Desarrollador Web Full-Stack en Formación</p>
+                <p><strong>Enfoque:</strong> Creación de interfaces limpias con HTML, CSS, JavaScript y desarrollo de lógica eficiente en el Back-End.</p>
+                <p><strong>Intereses:</strong> Apasionado por el hardware de PC, la optimización de sistemas y el desarrollo de proyectos web interactivos.</p>
+            </div>
+            <div class="social-links">
+                <a href="https://www.linkedin.com/feed/" target="_blank">LinkedIn</a>
+                <a href="https://github.com/CristiandLara" target="_blank">GitHub</a>
+                <a href="https://github.com/CristiandLara/Lista-Tareas" target="_blank">Portafolio</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- LÓGICA DE JAVASCRIPT -->
+    <script>
+        // Obtener elementos del DOM
+        const taskInput = document.getElementById('taskInput');
+        const taskList = document.getElementById('taskList');
+
+        // Función para agregar tareas
+        function addTask() {
+            const taskText = taskInput.value.trim();
+
+            if (taskText === '') {
+                alert('Por favor, escribe una tarea antes de agregar.');
+                return;
+            }
+
+            // Crear el elemento de la lista (li)
+            const li = document.createElement('li');
+            
+            // Añadir el texto de la tarea
+            const textNode = document.createTextNode(taskText);
+            li.appendChild(textNode);
+
+            // Crear el botón de eliminar
+            const deleteBtn = document.createElement('button');
+            deleteBtn.innerText = 'Eliminar';
+            deleteBtn.classList.add('btn-delete');
+            
+            // Evento para borrar la tarea al hacer clic
+            deleteBtn.onclick = function() {
+                taskList.removeChild(li);
+            };
+
+            // Unir botón al li, y el li a la lista uL
+            li.appendChild(deleteBtn);
+            taskList.appendChild(li);
+
+            // Limpiar el input y devolver el foco
+            taskInput.value = '';
+            taskInput.focus();
+        }
+
+        // Permitir agregar la tarea presionando la tecla "Enter"
+        taskInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                addTask();
+            }
+        });
+    </script>
+
+</body>
+</html>
