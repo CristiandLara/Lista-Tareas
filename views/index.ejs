@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Organiza y administra tus tareas pendientes.">
+    <link rel="stylesheet" href="/styles.css">
+    <title>Mi lista de tareas</title>
+</head>
+<body>
+    <main class="container">
+        <section class="todo-card" aria-labelledby="page-title">
+            <p class="eyebrow">Organiza tu día</p>
+            <h1 id="page-title">Mis tareas</h1>
+            <p class="intro">Anota lo que tienes pendiente y avanza paso a paso.</p>
+
+            <% if (error) { %>
+                <p class="notice notice-error" role="alert"><%= error %></p>
+            <% } %>
+            <% if (notice === 'created') { %>
+                <p class="notice notice-success" role="status">Tarea creada correctamente.</p>
+            <% } else if (notice === 'updated') { %>
+                <p class="notice notice-success" role="status">Tarea actualizada correctamente.</p>
+            <% } %>
+
+            <form class="task-form" action="/tasks" method="POST">
+                <label for="taskTitle">Título</label>
+                <input id="taskTitle" name="title" type="text" maxlength="120" required
+                    placeholder="¿Qué necesitas hacer?" value="<%= form.title || '' %>">
+
+                <label for="taskDescription">Descripción <span>(opcional)</span></label>
+                <textarea id="taskDescription" name="description" maxlength="1000" rows="3"
+                    placeholder="Agrega algunos detalles"><%= form.description || '' %></textarea>
+
+                <label for="taskDueDate">Fecha límite <span>(opcional)</span></label>
+                <input id="taskDueDate" name="dueDate" type="date" value="<%= form.dueDate || '' %>">
+                <button class="btn-add" type="submit">Agregar tarea</button>
+            </form>
+
+            <div class="list-heading">
+                <h2>Pendientes y completadas</h2>
+                <span class="task-count"><%= tasks.length %></span>
+            </div>
+
+            <% if (tasks.length === 0) { %>
+                <p class="empty-state">Todavía no hay tareas. ¡Agrega la primera!</p>
+            <% } else { %>
+                <ul class="task-list">
+                    <% tasks.forEach((task) => { %>
+                        <li class="task-card <%= task.completed ? 'is-completed' : '' %>">
+                            <div class="task-content">
+                                <h3><%= task.title %></h3>
+                                <% if (task.description) { %>
+                                    <p class="task-description"><%= task.description %></p>
+                                <% } %>
+                                <div class="task-meta">
+                                    <span>Creada: <time datetime="<%= task.createdAt.toISOString() %>"><%= task.createdAt.toLocaleDateString('es-ES') %></time></span>
+                                    <% if (task.dueDate) { %>
+                                        <span>Fecha límite: <time datetime="<%= task.dueDate.toISOString() %>"><%= task.dueDate.toLocaleDateString('es-ES', { timeZone: 'UTC' }) %></time></span>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="task-actions">
+                                <form action="/tasks/<%= task._id %>/toggle" method="POST">
+                                    <button class="btn-action btn-complete" type="submit">
+                                        <%= task.completed ? 'Reabrir' : 'Completar' %>
+                                    </button>
+                                </form>
+                                <a class="btn-action btn-edit" href="/tasks/<%= task._id %>/edit">Editar</a>
+                                <form action="/tasks/<%= task._id %>/delete" method="POST" data-confirm="¿Eliminar esta tarea?">
+                                    <button class="btn-action btn-delete" type="submit">Eliminar</button>
+                                </form>
+                            </div>
+                        </li>
+                    <% }); %>
+                </ul>
+            <% } %>
+        </section>
+
+        <section class="profile-card" aria-labelledby="profile-title">
+            <h2 id="profile-title">Sobre el creador</h2>
+            <div class="profile-info">
+                <p><strong>Nombre:</strong> Cristian</p>
+                <p><strong>Rol:</strong> Desarrollador Web Full-Stack en Formación</p>
+                <p><strong>Enfoque:</strong> Interfaces limpias y lógica eficiente de backend.</p>
+                <p><strong>Intereses:</strong> Hardware de PC, optimización de sistemas y desarrollo web.</p>
+            </div>
+            <div class="social-links">
+                <a href="https://www.linkedin.com/feed/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                <a href="https://github.com/CristiandLara" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://github.com/CristiandLara/Lista-Tareas" target="_blank" rel="noopener noreferrer">Portafolio</a>
+            </div>
+        </section>
+    </main>
+    <script src="/scripts.js" defer></script>
+</body>
+</html>

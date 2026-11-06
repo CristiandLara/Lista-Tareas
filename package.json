@@ -1,0 +1,18 @@
+{
+  "name": "lista-tareas",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Aplicacion MVC para gestionar tareas con Express, EJS y MongoDB",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node --watch app.js",
+    "check": "node --check app.js && node --check models/task.js && node --check controllers/taskController.js && node --check routes/taskRoutes.js && node --check scripts.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.6.1",
+    "ejs": "^7.0.2",
+    "express": "^5.1.0",
+    "mongoose": "^8.18.0"
+  }
+}

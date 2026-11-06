@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles.css">
+    <title>Editar tarea | Mi lista de tareas</title>
+</head>
+<body>
+    <main class="container">
+        <section class="todo-card" aria-labelledby="page-title">
+            <p class="eyebrow">Actualiza los detalles</p>
+            <h1 id="page-title">Editar tarea</h1>
+            <% if (error) { %>
+                <p class="notice notice-error" role="alert"><%= error %></p>
+            <% } %>
+            <form class="task-form" action="/tasks/<%= task._id %>/edit" method="POST">
+                <label for="taskTitle">Título</label>
+                <input id="taskTitle" name="title" type="text" maxlength="120" required
+                    value="<%= task.title || '' %>">
+
+                <label for="taskDescription">Descripción <span>(opcional)</span></label>
+                <textarea id="taskDescription" name="description" maxlength="1000" rows="4"><%= task.description || '' %></textarea>
+
+                <label for="taskDueDate">Fecha límite <span>(opcional)</span></label>
+                <input id="taskDueDate" name="dueDate" type="date"
+                    value="<%= typeof task.dueDate === 'string' ? task.dueDate : task.dueDate ? task.dueDate.toISOString().slice(0, 10) : '' %>">
+
+                <div class="form-actions">
+                    <button class="btn-add" type="submit">Guardar cambios</button>
+                    <a class="btn-action btn-edit" href="/">Cancelar</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>
